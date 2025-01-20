@@ -10,47 +10,39 @@ const FreelancerModel = require('../Models/freelancer');
 const ClientModel = require('../Models/client');
 
 const register = async (req, res) => {
-  try{
-      if(!req.body.email){
-        return res.status(400).send("Invalid body");
-    }
-    //
-    if(req.body.selectedRole !== "freelancer" && req.body.selectedRole !== "client"){
-        return res.status(400).send("Invalid user role");
-    }
-  const emailExist = await User.findOne({ email: req.body.email });
-  if (emailExist) return res.status(400).send("Email already exists");
+  try {
+    const {
+      firstName,
+      lastName,
+      email,
+      password,
+      role,
+      title,
+      bio,
+      skills,
+      portfolio,
+      companyName,
+      contactNumber,
+    } = req.body;
 
-  //hash password
-  const salt = await bcrypt.genSalt(10);
-  const hashPassword = await bcrypt.hash(req.body.password, salt);
+    const hashedPassword = await bcrypt.hash(password, 10);
 
+    const newUser = new User({
+      firstName,
+      lastName,
+      email,
+      password: hashedPassword,
+      role,
+      ...(role === 'freelancer' && { title, bio, skills, portfolio }),
+      ...(role === 'client' && { companyName, contactNumber }),
+    });
 
-  //create a new User
-  const user = new User({
-    firstName: req.body.firstName,
-    lastName: req.body.lastName,
-    email: req.body.email,
-    password: hashPassword,
-    role: req.body.selectedRole,
-  });
-  const savedUser = await user.save();
-
-  if(req.body.selectedRole === "client"){
-    Client.saveUserClient(savedUser._id)
+    await newUser.save();
+    res.status(201).json({ message: 'User registered successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
   }
-  
-  if(req.body.selectedRole === "freelancer"){
-    Freelancer.saveUserFreelancer(savedUser._id)
-  }
-
-  return res.status(202).send("Successful");
-  }
-  catch(err){
-    console.log("error", err);
-    return res.status(400).send("Invalid body");
-  }
-    
 };
 
 
