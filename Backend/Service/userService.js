@@ -75,59 +75,51 @@ const login = async (req, res) => {
     );
 };
 
-//retrieve user from User schema by their ID
+
 const getUserById = async (req, res) => {
   try {
-      const { id } = req.params;
+    const { id } = req.params;
 
-      // Fetch user by ID
-      const user = await User.findById(id);
+  
+    const user = await User.findById(id);
 
-      if (!user) {
-          return res.status(404).json({ message: "User not found" });
-      }
-
-      let response = {
-          id: user._id,
-          firstName: user.firstName,
-          lastName: user.lastName,
-          email: user.email,
-          role: user.role,
-          image: user.image || null,
-      };
-
-      // If the user is a freelancer, fetch their profile details
-      if (user.role === "freelancer") {
-          const freelancerProfile = await FreelancerModel.findOne({ userId: user._id });
-
-          if (freelancerProfile) {
-              response.freelancerProfile = {
-                  title: freelancerProfile.title,
-                  bio: freelancerProfile.bio,
-                  skills: freelancerProfile.skills,
-                  portfolio: freelancerProfile.portfolio,
-                  email: freelancerProfile.email,
-              };
-          }
-      }
-      // If the user is a client, fetch their profile details
-      if (user.role === "client") {
-        const ClientProfile = await ClientModel.findOne({ user: user._id });
-
-        if (ClientProfile) {
-            response.ClientProfile = {
-                companyName: ClientProfile.companyName,
-                contactNumber: ClientProfile.contactNumber,
-                email: ClientProfile.email,        
-            };
-        }
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
     }
 
-      // Return the response
-      return res.status(200).json(response);
+    let response = {
+      id: user._id,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      role: user.role,
+      image: user.image || null, 
+    };
+
+    
+    if (user.role === "freelancer") {
+      response.freelancerProfile = {
+        title: user.title,
+        bio: user.bio,
+        skills: user.skills,
+        portfolio: user.portfolio,
+      };
+    }
+
+    
+    if (user.role === "client") {
+      response.clientProfile = {
+        companyName: user.companyName,
+        contactNumber: user.contactNumber,
+      };
+    }
+
+   
+    return res.status(200).json(response);
   } catch (error) {
-      console.error(error);
-      return res.status(500).json({ message: "An error occurred", error: error.message });
+    console.error(error);
+    return res.status(500).json({ message: "An error occurred", error: error.message });
   }
 };
+
 module.exports = { register, login, getUserById};

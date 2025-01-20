@@ -25,6 +25,7 @@ import PostProjectLayout from './Components/PostProject/PostProjectLayout';
 
 import ProjectList from './Components/Projects/ProjectList';
 import ProjectView from "./Components/Projects/ProjectView";
+import Profile from './Components/Profile/FreelancerProfile';
 
 
 
@@ -129,6 +130,8 @@ const Layout = ({role}) =>{
         <Route path="/project-budget"element={<ProjectBudget/>}> </Route>
         <Route path="/project-description"element={<ProjectDescription/>}> </Route>
         <Route path="/project-details"element={<ProjectDetails/>}> </Route>
+        {/* <Route path={"/profile"} element={<Profile/>}> </Route> */}
+
 
         
         
@@ -144,7 +147,7 @@ const Layout = ({role}) =>{
             <Route path="/project" element={<ProjectList/>} />
             <Route path="/project/:projectId" element={<ProjectView />} />
             
-            <Route path="/freelancer/profile" element={<FreelancerProfile />} />
+            <Route path="/freelancer/profile" element={<Profile />} />
            
 
           </Route>
