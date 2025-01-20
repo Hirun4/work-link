@@ -160,6 +160,8 @@ function SignupForm() {
           borderRadius: 3,
           overflow: 'hidden',
           backgroundColor: 'white',
+          // marginTop: 6,
+          paddingTop: 10,
         }}
       >
         <Box

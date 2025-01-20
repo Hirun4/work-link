@@ -6,6 +6,8 @@
   align-items: center;
   height: 100vh; 
   background: #fff;
+  margin-top: 15px;
+  padding: 15px;
 }
 
 .role-selection {
