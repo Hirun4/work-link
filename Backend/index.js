@@ -14,7 +14,7 @@ const project = require("./Routes/project-route")
 
 //middleware
 app.use(express.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+
 app.use(
   cors()
 );
@@ -23,7 +23,7 @@ app.use(
  app.use("/api/project", project)
 
 
-const port = process.env.PORT;
+const port = process.env.PORT || 3000
 const server = app.listen(port, () =>
   console.log("server started in port", { port })
 );

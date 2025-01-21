@@ -77,49 +77,28 @@ const login = async (req, res) => {
 
 
 const getUserById = async (req, res) => {
+  console.log("Request body:", req.body);
   try {
-    const { id } = req.params;
-
-  
-    const user = await User.findById(id);
-
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
+    const { userId } = req.body; 
+    console.log("Received userId:", userId);
+    if (!userId) {
+      return res.status(400).json({ success: false, message: "User ID is required" });
     }
 
-    let response = {
-      id: user._id,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      email: user.email,
-      role: user.role,
-      image: user.image || null, 
-    };
+    const userData = await User.findById(userId).select("-password");
 
-    
-    if (user.role === "freelancer") {
-      response.freelancerProfile = {
-        title: user.title,
-        bio: user.bio,
-        skills: user.skills,
-        portfolio: user.portfolio,
-      };
+    if (!userData) {
+      return res.status(404).json({ success: false, message: "User not found" });
     }
 
-    
-    if (user.role === "client") {
-      response.clientProfile = {
-        companyName: user.companyName,
-        contactNumber: user.contactNumber,
-      };
-    }
-
-   
-    return res.status(200).json(response);
+    res.json({ success: true, userData });
   } catch (error) {
-    console.error(error);
-    return res.status(500).json({ message: "An error occurred", error: error.message });
+    console.log(error);
+    res.status(500).json({ success: false, message: "Server error" });
   }
 };
+
+
+
 
 module.exports = { register, login, getUserById};
