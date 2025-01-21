@@ -76,29 +76,37 @@ const login = async (req, res) => {
 };
 
 
-const getUserById = async (req, res) => {
-  console.log("Request body:", req.body);
+const getProfile = async (req, res) => {
   try {
-    const { userId } = req.body; 
-    console.log("Received userId:", userId);
-    if (!userId) {
-      return res.status(400).json({ success: false, message: "User ID is required" });
+    // The user ID will be extracted from the token and attached to the `req.user` object by the `verifyToken` middleware
+    const userId = req.user._id;
+    
+    // Fetch user details from the database using the userId
+    const user = await User.findById(userId);
+    
+    if (!user) {
+      return res.status(404).send({ error: 'User not found' });
     }
 
-    const userData = await User.findById(userId).select("-password");
-
-    if (!userData) {
-      return res.status(404).json({ success: false, message: "User not found" });
-    }
-
-    res.json({ success: true, userData });
+    // Send the user details as response
+    res.status(200).json({
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      role: user.role,
+      title: user.title,
+      bio: user.bio,
+      skills: user.skills,
+      portfolio: user.portfolio,
+      companyName: user.companyName,
+      contactNumber: user.contactNumber
+    });
   } catch (error) {
-    console.log(error);
-    res.status(500).json({ success: false, message: "Server error" });
+    res.status(500).send({ error: 'Error fetching user profile' });
   }
 };
 
 
 
 
-module.exports = { register, login, getUserById};
+module.exports = { register, login, getProfile};

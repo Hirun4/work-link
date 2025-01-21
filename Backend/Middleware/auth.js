@@ -5,7 +5,7 @@ const verifyToken = (req, res, next) => {
     const authHeader = req.header('Authorization');
     if (!authHeader) return res.status(401).send('Access Denied');
 
-    // Remove 'Bearer ' from token string
+    
     const token = authHeader.split(' ')[1];
     
     try {

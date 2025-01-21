@@ -1,5 +1,6 @@
 const router = require("express").Router();
 
+const { verifyToken } = require("../Middleware/auth");
 const User = require("../Service/userService");
 
 //Add Users To Database
@@ -9,6 +10,6 @@ router.post("/register", User.register);
 router.post("/login", User.login);
 
 //Get user by id
-router.post("/profile",User.getUserById);
+router.get("/profile",verifyToken,User.getProfile);
 
 module.exports = router;
