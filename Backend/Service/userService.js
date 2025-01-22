@@ -54,7 +54,7 @@ const login = async (req, res) => {
   const match = await bcrypt.compare(req.body.password, user.password);
   if (!match) return res.status(400).send({error: "Invalid Email or Password"});
 
-  //jwtwebtoken
+  
   //create and assign a token
   const token = jwt.sign(
     { 
