@@ -9,8 +9,8 @@ const Profile = () => {
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
-        const token = localStorage.getItem('auth-token'); 
-        console.log(token);
+        const token = localStorage.getItem('accessToken'); 
+        console.log("token : ", token);
          // Assuming token is stored in localStorage
         const response = await axios.get('http://localhost:3000/api/user/profile', {
           headers: {
