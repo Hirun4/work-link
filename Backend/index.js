@@ -4,6 +4,7 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const bodyParser = require("body-parser");
+const profilePictureRoutes = require("./Routes/profilePicture.route.js");
 require("./Database/mongodb.js");
 
 
@@ -21,6 +22,7 @@ app.use(
 //Routes Middlewares
  app.use("/api/user",users);
  app.use("/api/project", project)
+ app.use("/api/profile-picture", profilePictureRoutes);
 
 
 const port = process.env.PORT || 3000

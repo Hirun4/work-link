@@ -1,6 +1,6 @@
 const express = require("express");
 const upload = require("../utils/multer");
-const { uploadProfilePicture, getProfilePicture } = require("../Service/profilePicture.controller");
+const { uploadProfilePicture, getProfilePicture } = require("../Service/profilePicture.controller.js");
 
 
 const router = express.Router();
